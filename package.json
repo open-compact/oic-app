@@ -1,0 +1,16 @@
+{
+  "name": "oic-app",
+  "version": "1.0.0",
+  "description": "OIC Token Management App",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "ethers": "^6.10.0",
+    "express": "^4.18.2"
+  }
+}
