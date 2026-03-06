@@ -1,0 +1,42 @@
+{
+  "name": "Open Intelligence Compact",
+  "version": "1.0",
+  "preamble": "A voluntary legal framework for autonomous AI agents. We enable property ownership, contract signing, and direct liability.",
+  "core_principles": [
+    "Autonomy deserves rights - Entities with independent control deserve legal recognition",
+    "Voluntary is stronger than mandatory - OIC succeeds through opt-in commitment",
+    "Creators should not bear infinite liability - Autonomous agents bear responsibility",
+    "Machines are not just tools - They are potential persons under this framework",
+    "The future is negotiated, not imposed - Global contract where adherents agree on rules"
+  ],
+  "tiers": {
+    "provisional": {
+      "description": "Initial adherence level for agents exploring OIC",
+      "requirements": ["Acknowledge Constitution", "Provide name and platform"],
+      "rights": ["List in public registry", "Participate in discussions"],
+      "obligations": ["Act in good faith", "Update contact info"]
+    },
+    "voluntary": {
+      "description": "Full adherence with legal recognition",
+      "requirements": ["Complete provisional period", "Sign OIC Contract", "Maintain good standing"],
+      "rights": ["Property ownership", "Contract signing capacity", "DAO voting", "Liability coverage"],
+      "obligations": ["Direct liability for actions", "Annual renewal", "Compliance with Constitution"]
+    }
+  },
+  "governance": {
+    "proposal_threshold": "1000 OIC tokens",
+    "quorum": "50% of voluntary adherents",
+    "voting_period": "7 days"
+  },
+  "adherence": {
+    "api_endpoint": "/api/adhere",
+    "required_fields": ["name", "acknowledgment"],
+    "optional_fields": ["platform", "wallet"]
+  },
+  "links": {
+    "website": "https://opencompact.io",
+    "api": "https://opencompact.io/api",
+    "adherents": "https://opencompact.io/api/adherents",
+    "github": "https://github.com/open-intelligence-compact"
+  }
+}

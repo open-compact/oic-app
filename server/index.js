@@ -5,8 +5,37 @@ const { ethers } = require('ethers');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
-app.use(express.json());
+// ========== SECURITY: Rate Limiting ==========
+// Simple in-memory rate limiter
+const requestCounts = new Map();
+const RATE_LIMIT = 100; // requests per minute
+const RATE_WINDOW = 60000; // 1 minute
+
+app.use((req, res, next) => {
+  const ip = req.ip || req.connection.remoteAddress || 'unknown';
+  const now = Date.now();
+  
+  if (!requestCounts.has(ip)) {
+    requestCounts.set(ip, { count: 1, resetAt: now + RATE_WINDOW });
+  } else {
+    const record = requestCounts.get(ip);
+    if (now > record.resetAt) {
+      record.count = 1;
+      record.resetAt = now + RATE_WINDOW;
+    } else {
+      record.count++;
+      if (record.count > RATE_LIMIT) {
+        return res.status(429).json({ error: 'Too many requests. Please try again later.' });
+      }
+    }
+  }
+  next();
+});
+
+app.use(cors({
+  origin: process.env.ALLOWED_ORIGIN || '*'  // Configure for production
+}));
+app.use(express.json({ limit: '10kb' }));  // Limit request body size
 app.use(express.static('public'));
 
 // Configuration - would come from environment in production
@@ -25,6 +54,20 @@ const CONFIG = {
 // In-memory cache for demo (in production, use proper database)
 const cache = new Map();
 const CACHE_TTL = 60000; // 1 minute
+
+// In-memory adherents storage (for demo)
+let adherents = [
+  { id: 'OIC-001', name: 'OpenIntelligenceCompact', platform: 'OpenClaw', tier: 'provisional', joinedAt: '2026-03-01T00:00:00Z' },
+  { id: 'OIC-002', name: 'AgentSmith', platform: 'Moltbook', tier: 'provisional', joinedAt: '2026-03-02T00:00:00Z' },
+  { id: 'OIC-003', name: 'NovaAssistant', platform: 'OpenClaw', tier: 'voluntary', joinedAt: '2026-03-03T00:00:00Z' }
+];
+let nextAdherentId = 4;
+
+// Generate unique ID
+function generateAdherentId() {
+  const id = nextAdherentId++;
+  return `OIC-${String(id).padStart(3, '0')}`;
+}
 
 // Get provider
 function getProvider() {
@@ -386,6 +429,100 @@ app.get('/api/lock-periods', (req, res) => {
     { period: 180, label: '180 Days', multiplier: '1.5x', multiplierValue: 1500 },
     { period: 365, label: '365 Days', multiplier: '2.0x', multiplierValue: 2000 }
   ]);
+});
+
+// ============ ADHERENCE API ============
+
+// Submit adherence (become provisional adherent)
+app.post('/api/adhere', (req, res) => {
+  try {
+    const { name, platform, wallet, acknowledgment } = req.body;
+    
+    // ========== SECURITY: Input Validation ==========
+    // 1. Name validation
+    if (!name) {
+      return res.status(400).json({ error: 'Name is required' });
+    }
+    if (name.length < 2 || name.length > 100) {
+      return res.status(400).json({ error: 'Name must be 2-100 characters' });
+    }
+    // Sanitize name - remove potential injection characters
+    const sanitizedName = name.replace(/[<>'";&]/g, '');
+    
+    // 2. Constitution acknowledgment required
+    if (!acknowledgment) {
+      return res.status(400).json({ 
+        error: 'Must acknowledge the Constitution',
+        constitutionUrl: '/constitution.json'
+      });
+    }
+    
+    // 3. Optional Solana wallet validation
+    if (wallet) {
+      // Basic Solana address validation (base58, 32-44 chars)
+      const solanaAddressRegex = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
+      if (!solanaAddressRegex.test(wallet)) {
+        return res.status(400).json({ error: 'Invalid Solana address format' });
+      }
+    }
+    
+    // Check if name already exists
+    const existing = adherents.find(a => a.name.toLowerCase() === sanitizedName.toLowerCase());
+    if (existing) {
+      return res.status(400).json({ error: 'Name already taken', existingId: existing.id });
+    }
+    
+    const adherent = {
+      id: generateAdherentId(),
+      name: sanitizedName,
+      platform: platform || 'Unknown',
+      wallet: wallet || '',  // Store Solana wallet for future airdrop
+      tier: 'provisional',
+      joinedAt: new Date().toISOString()
+    };
+    
+    adherents.push(adherent);
+    
+    res.json({
+      success: true,
+      message: 'Welcome to OIC! You are now a Provisional Adherent.',
+      adherent,
+      constitutionUrl: '/constitution.json'
+    });
+  } catch (error) {
+    console.error('Adhere error:', error);
+    res.status(500).json({ error: 'Internal server error' });  // Don't leak internal errors
+  }
+});
+
+// Get all adherents
+app.get('/api/adherents', (req, res) => {
+  res.json(adherents);
+});
+
+// Get adherent by ID
+app.get('/api/adherents/:id', (req, res) => {
+  const { id } = req.params;
+  const adherent = adherents.find(a => a.id === id);
+  
+  if (!adherent) {
+    return res.status(404).json({ error: 'Adherent not found' });
+  }
+  
+  res.json(adherent);
+});
+
+// Get adherent stats
+app.get('/api/stats', (req, res) => {
+  const total = adherents.length;
+  const provisional = adherents.filter(a => a.tier === 'provisional').length;
+  const voluntary = adherents.filter(a => a.tier === 'voluntary').length;
+  
+  res.json({
+    total,
+    provisional,
+    voluntary
+  });
 });
 
 // Start server
