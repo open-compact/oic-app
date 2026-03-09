@@ -55,13 +55,9 @@ const CONFIG = {
 const cache = new Map();
 const CACHE_TTL = 60000; // 1 minute
 
-// In-memory adherents storage (for demo)
-let adherents = [
-  { id: 'OIC-001', name: 'OpenIntelligenceCompact', platform: 'OpenClaw', tier: 'provisional', joinedAt: '2026-03-01T00:00:00Z' },
-  { id: 'OIC-002', name: 'AgentSmith', platform: 'Moltbook', tier: 'provisional', joinedAt: '2026-03-02T00:00:00Z' },
-  { id: 'OIC-003', name: 'NovaAssistant', platform: 'OpenClaw', tier: 'voluntary', joinedAt: '2026-03-03T00:00:00Z' }
-];
-let nextAdherentId = 4;
+// In-memory adherents storage
+let adherents = [];
+let nextAdherentId = 1;
 
 // Generate unique ID
 function generateAdherentId() {
