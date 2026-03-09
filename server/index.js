@@ -495,6 +495,32 @@ app.post('/api/adhere', (req, res) => {
   }
 });
 
+// ============ VERIFICATION API ============
+
+// Verify adherent status by DID or address
+app.get('/api/verify/:identifier', (req, res) => {
+  const { identifier } = req.params;
+  
+  const adherent = adherents.find(a => 
+    a.id.toLowerCase() === identifier.toLowerCase() ||
+    a.name.toLowerCase() === identifier.toLowerCase() ||
+    (a.did && a.did.toLowerCase() === identifier.toLowerCase()) ||
+    (a.walletAddress && a.walletAddress.toLowerCase() === identifier.toLowerCase())
+  );
+  
+  if (!adherent) {
+    return res.status(404).json({ verified: false, identifier });
+  }
+  
+  res.json({
+    verified: true,
+    id: adherent.id,
+    name: adherent.name,
+    tier: adherent.tier,
+    memberSince: adherent.joinedAt
+  });
+});
+
 // Get all adherents
 app.get('/api/adherents', (req, res) => {
   res.json(adherents);

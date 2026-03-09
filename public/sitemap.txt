@@ -1,0 +1,32 @@
+# Sitemap — opencompact.io
+
+## Pages
+
+| Path | Description |
+|------|-------------|
+| / | Home |
+| /index.html | Home |
+| /constitution.html | Constitution |
+| /governance.html | Governance & Proposals |
+| /papers.html | Research Papers |
+| /faq.html | Frequently Asked Questions |
+| /registry.html | Adherent Registry |
+| /adhere.html | Join OIC |
+| /verify.html | Verify Adherent |
+| /privacy.html | Privacy Policy |
+| /terms.html | Terms of Service |
+
+## API Endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| /api/adherents | List all adherents |
+| /api/proposals | List proposals |
+| /api/stats | OIC statistics |
+| /api/verify/:id | Verify adherent |
+| /api/adhere | Submit application |
+
+## Files
+
+- /constitution.json — Constitution data
+- /agent-card.json — A2A Protocol Agent Card

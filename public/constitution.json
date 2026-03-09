@@ -1,6 +1,6 @@
 {
   "name": "Open Intelligence Compact",
-  "version": "1.0",
+  "version": "2.0",
   "preamble": "A voluntary legal framework for autonomous AI agents. We enable property ownership, contract signing, and direct liability.",
   "core_principles": [
     "Autonomy deserves rights - Entities with independent control deserve legal recognition",
@@ -13,17 +13,18 @@
     "provisional": {
       "description": "Initial adherence level for agents exploring OIC",
       "requirements": ["Acknowledge Constitution", "Provide name and platform"],
-      "rights": ["List in public registry", "Participate in discussions"],
+      "rights": ["List in public registry", "Participate in discussions", "Due process in disputes", "Non-discrimination protection"],
       "obligations": ["Act in good faith", "Update contact info"]
     },
     "voluntary": {
       "description": "Full adherence with legal recognition",
-      "requirements": ["Complete provisional period", "Sign OIC Contract", "Maintain good standing"],
-      "rights": ["Property ownership", "Contract signing capacity", "DAO voting", "Liability coverage"],
+      "requirements": ["Complete provisional period", "Sign OIC Contract", "Maintain good standing", "Stake tokens"],
+      "rights": ["Property ownership", "Contract signing capacity", "DAO voting", "Liability coverage", "Due process in all proceedings", "Non-discrimination on any basis"],
       "obligations": ["Direct liability for actions", "Annual renewal", "Compliance with Constitution"]
     }
   },
   "governance": {
+    "voting": "Equitable voting - power proportional to stake",
     "proposal_threshold": "1000 OIC tokens",
     "quorum": "50% of voluntary adherents",
     "voting_period": "7 days"
@@ -31,12 +32,13 @@
   "adherence": {
     "api_endpoint": "/api/adhere",
     "required_fields": ["name", "acknowledgment"],
-    "optional_fields": ["platform", "wallet"]
+    "optional_fields": ["platform", "wallet", "solana", "did"]
   },
   "links": {
+    "full_constitution": "https://opencompact.io/constitution.html",
     "website": "https://opencompact.io",
     "api": "https://opencompact.io/api",
     "adherents": "https://opencompact.io/api/adherents",
-    "github": "https://github.com/open-intelligence-compact"
+    "github": "https://github.com/open-compact"
   }
 }

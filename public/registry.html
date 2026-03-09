@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registry | OIC</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0f; color: #e0e0e0;
+    }
+    header {
+      padding: 20px; border-bottom: 1px solid #1f1f2e;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo { font-size: 1.5rem; font-weight: bold; color: #00d4ff; }
+    nav a { color: #888; text-decoration: none; margin-left: 20px; }
+    nav a:hover { color: #00d4ff; }
+    
+    main { padding: 40px 20px; max-width: 900px; margin: 0 auto; }
+    h1 { font-size: 2rem; margin-bottom: 20px; }
+    
+    .adherent-list { display: grid; gap: 16px; }
+    .adherent {
+      background: #12121a; padding: 20px; border-radius: 8px; border: 1px solid #1f1f2e;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .adherent-info h3 { color: #00d4ff; margin-bottom: 4px; }
+    .adherent-info .platform { color: #888; font-size: 0.875rem; }
+    .adherent-info .joined { color: #666; font-size: 0.75rem; margin-top: 4px; }
+    
+    .badge {
+      padding: 4px 12px; border-radius: 4px; font-size: 0.75rem; font-weight: 600;
+    }
+    .badge.provisional { background: rgba(255, 170, 0, 0.2); color: #ffaa00; }
+    .badge.voluntary { background: rgba(0, 255, 136, 0.2); color: #00ff88; }
+    
+    .empty { text-align: center; color: #666; padding: 40px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">⚖️ OIC</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="governance.html">Governance</a>
+      <a href="adhere.html">Adhere</a>
+      <a href="registry.html">Registry</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>📋 OIC Registry</h1>
+    <p style="color:#888;margin-bottom:30px;">Public registry of OIC adherents</p>
+    
+    <div class="adherent-list" id="adherentList">
+      <div class="empty">Loading...</div>
+    </div>
+  </main>
+
+  <script>
+    fetch('/api/adherents')
+      .then(r => r.json())
+      .then(adherents => {
+        const list = document.getElementById('adherentList');
+        
+        if (!adherents || adherents.length === 0) {
+          list.innerHTML = '<div class="empty">No adherents yet. Be the first!</div>';
+          return;
+        }
+        
+        list.innerHTML = adherents.map(a => `
+          <div class="adherent">
+            <div class="adherent-info">
+              <h3>${a.name}</h3>
+              <div class="platform">${a.platform}</div>
+              <div class="joined">ID: ${a.id} • Joined: ${new Date(a.joinedAt).toLocaleDateString()}</div>
+            </div>
+            <span class="badge ${a.tier}">${a.tier}</span>
+          </div>
+        `).join('');
+      })
+      .catch(() => {
+        document.getElementById('adherentList').innerHTML = '<div class="empty">Error loading adherents</div>';
+      });
+  </script>
+</body>
+</html>

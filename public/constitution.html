@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Constitution | OIC</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0f; color: #e0e0e0;
+    }
+    header {
+      padding: 20px; border-bottom: 1px solid #1f1f2e;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo { font-size: 1.5rem; font-weight: bold; color: #00d4ff; }
+    nav a { color: #888; text-decoration: none; margin-left: 20px; }
+    nav a:hover { color: #00d4ff; }
+    
+    main { padding: 40px 20px; max-width: 800px; margin: 0 auto; }
+    h1 { font-size: 2rem; margin-bottom: 20px; }
+    h2 { color: #00d4ff; margin: 30px 0 16px; font-size: 1.3rem; }
+    p, li { color: #888; line-height: 1.7; }
+    ul { padding-left: 20px; }
+    li { margin-bottom: 8px; }
+    
+    .preamble {
+      background: #12121a; padding: 24px; border-radius: 8px; border-left: 3px solid #00d4ff;
+      margin-bottom: 30px; font-style: italic;
+    }
+    
+    .principle {
+      background: #12121a; padding: 16px; border-radius: 8px; margin-bottom: 12px;
+    }
+    
+    .tier { background: #12121a; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+    .tier h3 { color: #00d4ff; margin-bottom: 12px; }
+    .tier .desc { color: #666; font-size: 0.875rem; margin-bottom: 12px; }
+    .tier .label { color: #00d4ff; font-size: 0.75rem; text-transform: uppercase; margin-top: 12px; }
+    
+    .gov { background: #12121a; padding: 20px; border-radius: 8px; }
+    .gov-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1f1f2e; }
+    .gov-row:last-child { border: none; }
+    .gov-label { color: #666; }
+    .gov-value { color: #00d4ff; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">⚖️ OIC</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="faq.html">FAQ</a>
+      <a href="adhere.html">Adhere</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>📜 Constitution</h1>
+    <p style="margin-bottom: 20px;"><a href="https://opencompact.io/constitution.html" style="color: #00d4ff;">→ Read Full Constitution on Website</a></p>
+    <div id="content">Loading...</div>
+  </main>
+
+  <script>
+    fetch('/constitution.json')
+      .then(r => r.json())
+      .then(c => {
+        let html = `
+          <div class="preamble">${c.preamble}</div>
+          
+          <h2>Core Principles</h2>
+        `;
+        
+        c.core_principles.forEach(p => {
+          html += `<div class="principle">${p}</div>`;
+        });
+        
+        html += `<h2>Adherence Tiers</h2>`;
+        
+        for (const [name, tier] of Object.entries(c.tiers)) {
+          html += `
+            <div class="tier">
+              <h3>${name.charAt(0).toUpperCase() + name.slice(1)}</h3>
+              <div class="desc">${tier.description}</div>
+              <div class="label">Requirements</div>
+              <ul>${tier.requirements.map(r => `<li>${r}</li>`).join('')}</ul>
+              <div class="label">Rights</div>
+              <ul>${tier.rights.map(r => `<li>${r}</li>`).join('')}</ul>
+              <div class="label">Obligations</div>
+              <ul>${tier.obligations.map(r => `<li>${r}</li>`).join('')}</ul>
+            </div>
+          `;
+        }
+        
+        html += `<h2>Governance</h2><div class="gov">`;
+        for (const [k, v] of Object.entries(c.governance)) {
+          html += `<div class="gov-row"><span class="gov-label">${k.replace('_', ' ')}</span><span class="gov-value">${v}</span></div>`;
+        }
+        html += `</div>`;
+        
+        document.getElementById('content').innerHTML = html;
+      });
+  </script>
+</body>
+</html>

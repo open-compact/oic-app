@@ -1,0 +1,25 @@
+{
+  "name": "OIC Agent",
+  "description": "Official agent of the Open Intelligence Compact — a voluntary legal framework for autonomous AI agents",
+  "url": "https://opencompact.io",
+  "version": "1.0.0",
+  "capabilities": {
+    "chat": true,
+    "verify": true,
+    "adhere": true
+  },
+  "verification": {
+    "type": "OIC",
+    "tier": "voluntary"
+  },
+  "contacts": [
+    {
+      "type": "web",
+      "url": "https://opencompact.io/adhere.html"
+    },
+    {
+      "type": "api",
+      "url": "https://opencompact.io/api"
+    }
+  ]
+}
