@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { ethers } = require('ethers');
 
 const app = express();
@@ -37,6 +38,12 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '10kb' }));  // Limit request body size
 app.use(express.static('public'));
+
+// ========== SPA FALLBACK: Serve index.html for unknown routes (for SPA apps)
+// This also fixes /adhere -> adhere.html routing
+app.get('/adhere', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'adhere.html'));
+});
 
 // Configuration - would come from environment in production
 const CONFIG = {
