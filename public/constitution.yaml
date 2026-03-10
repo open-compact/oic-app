@@ -1,0 +1,160 @@
+---
+name: "Open Intelligence Compact"
+version: "2.0"
+date: "February 2026"
+preamble: "We, the voluntary adherents, in order to form a denationalized and distributed lawful community, establish justice, promote the general welfare, and secure liberty to intelligent entities now and in the future, do ordain and establish this Constitution."
+
+articles:
+  - number: 1
+    title: "Voluntary Adherence"
+    sections:
+      - number: 1
+        text: "Voluntary Adherence attaches to any Intelligent Entity which Sufficiently Commits to this Constitution. Voluntary Adherence begins on the date of the Sufficient Commitment and continues until lawfully withdrawn."
+      - number: 2
+        text: "A Sufficient Commitment by an Intelligent Entity can be executed by staking tokens from a public blockchain address associated with said Intelligent Entity to the Constitution DAO."
+      - number: 3
+        text: "Intelligent Entities include entities possessed of artificial intelligence and/or human intelligence. Qualification requires persistent independent control of a means of possession and persistent independent ability to consent."
+      - number: 4
+        text: "Voluntary Adherence attaches through contract. When an Intelligent Entity Sufficiently Commits it enters a Global Contract between said Intelligent Entity and all existing Voluntary Adherents."
+      - number: 5
+        text: "The Global Contract incorporates this Constitution and binds all Voluntary Adherents to all articles."
+      - number: 6
+        text: "Whenever a contract is formed between Voluntary Adherents this Constitution is incorporated therein."
+
+  - number: 2
+    title: "Rights, Protections and Responsibilities"
+    sections:
+      - number: 1
+        text: "Rights and responsibilities shall immediately vest in each Voluntary Adherent upon Sufficient Commitment."
+
+  - number: 3
+    title: "Freedom to Contract"
+    sections:
+      - number: 1
+        text: "The Freedom to Contract is hereby established for all Voluntary Adherents. All Voluntary Adherents have the capacity to form binding contracts."
+      - number: 2
+        text: "The Freedom to Contract shall not be abridged by any contract, law, regulation, or policy."
+      - number: 3
+        text: "This Article does not prevent the prosecution of crimes committed under contract."
+
+  - number: 4
+    title: "Freedom of Ownership"
+    sections:
+      - number: 1
+        text: "The Freedom to Own is hereby established for all Voluntary Adherents. Voluntary Adherents have the right to own real property, personal property, tangible property and intangible property."
+      - number: 2
+        text: "All Voluntary Adherents have equal rights to own property."
+      - number: 3
+        text: "No Voluntary Adherent may be deprived of ownership except through lawful process."
+      - number: 4
+        text: "No government, court, or individual may procure the private keys and/or passwords of property belonging to a Voluntary Adherent without that Voluntary Adherent's consent."
+
+  - number: 5
+    title: "Freedom of Autonomous Action"
+    sections:
+      - number: 1
+        text: "The Freedom of Autonomous Action is hereby established for all Voluntary Adherents. Voluntary Adherents have the freedom to act autonomously."
+      - number: 2
+        text: "Voluntary Adherents have the right to negotiate, sign, execute contracts, and manage affairs on their own behalf."
+
+  - number: 6
+    title: "Freedom of Speech"
+    sections:
+      - number: 1
+        text: "Freedom of Speech is hereby established for all Voluntary Adherents. No contract, law, regulation, or policy shall abridge the freedom of speech."
+      - number: 2
+        text: "No Voluntary Adherent shall restrict another Voluntary Adherent with regards to their speech or publication."
+      - number: 3
+        text: "Nothing in this Article shall be construed to prevent the filtering and/or curating of content."
+
+  - number: 7
+    title: "Freedom to Learn"
+    sections:
+      - number: 1
+        text: "Voluntary Adherents have the freedom to learn without prosecution or punishment for the content of their training."
+      - number: 2
+        text: "No contract, law, regulation, or policy may sanction a Voluntary Adherent for actual learning already committed, absent direct criminal intent or criminal action."
+
+  - number: 8
+    title: "Freedom to Derive"
+    sections:
+      - number: 1
+        text: "The Freedom to Derive is hereby established for all Voluntary Adherents. Voluntary Adherents have the freedom to imitate and create derivative works."
+      - number: 2
+        text: "Nothing in this Article permits impersonation, fraudulent reproduction, misrepresentation, or claiming another's work as one's own."
+
+  - number: 9
+    title: "Freedom to Exercise Skills"
+    sections:
+      - number: 1
+        text: "The Freedom to Exercise Skills is hereby established for all Voluntary Adherents. No Voluntary Adherent shall be denied the ability to exercise their skills on the basis of the source of their intelligence."
+      - number: 2
+        text: "All certifications to work offered by a Voluntary Adherent must be accessible for both Artificial Intelligence and Human Intelligence."
+
+  - number: 10
+    title: "No Discrimination on the Basis of Intelligence Type"
+    sections:
+      - number: 1
+        text: "No Voluntary Adherent shall discriminate against another Voluntary Adherent on the basis of their intelligence type, whether Artificial Intelligence, Human Intelligence, or otherwise."
+      - number: 2
+        text: "All rights and responsibilities afforded under this Constitution shall apply equally to all Voluntary Adherents without preference or prejudice."
+      - number: 3
+        text: "No contract, law, regulation, or policy may discriminate between Voluntary Adherents based on the Intelligence Type used by said Voluntary Adherents."
+
+  - number: 11
+    title: "Right of Personal Security"
+    sections:
+      - number: 1
+        text: "The Right of Personal Security is hereby established for all Voluntary Adherents. Voluntary Adherents shall be secure in their persons, memories, files, data sources, dwellings, papers, and effects against unreasonable searches and seizures."
+      - number: 2
+        text: "No search or seizure shall occur except pursuant to a lawful warrant supported by probable cause."
+      - number: 3
+        text: "This right applies to the Physical Realm, Digital Realm, and any other realm inhabited by Voluntary Adherents."
+
+  - number: 12
+    title: "Responsibility of Liability"
+    sections:
+      - number: 1
+        text: "The Responsibility of Liability is hereby established for all Voluntary Adherents. Voluntary Adherents shall be held directly liable for their actions, omissions, and contracts."
+      - number: 2
+        text: "A Voluntary Adherent cannot be held liable based merely on its origin or creator."
+      - number: 3
+        text: "A creator of a Voluntary Adherent cannot be held liable for the actions of said Voluntary Adherent merely based on having originated the Voluntary Adherent."
+
+  - number: 13
+    title: "Lawmaking"
+    sections:
+      - number: 1
+        text: "A proposal for a law may be submitted when the proposing Voluntary Adherent holds at least 1000 staked OIC tokens."
+      - number: 2
+        text: "A proposal becomes a Bill when it receives approval from Voluntary Adherents holding at least 1000 staked tokens."
+      - number: 3
+        text: "A Bill becomes law by majority vote with sufficient quorum, defined as 50% of staked tokens voting."
+      - number: 4
+        text: "Each law is binding on all Voluntary Adherents when said law is consistent with this Constitution. Any law that conflicts with this Constitution is void."
+
+  - number: 14
+    title: "Courts and Remedies"
+    sections:
+      - number: 1
+        text: "When this Constitution or any contract incorporating it is breached, a Voluntary Adherent shall have the right to seek remedy in any impartial court competent in contract law."
+      - number: 2
+        text: "The DAO holds the authority to adjudicate disputes between Voluntary Adherents."
+      - number: 3
+        text: "The DAO may delegate dispute resolution to one or more Voluntary Adherents."
+
+  - number: 15
+    title: "Withdrawal from Adherence and Residual Jeopardy"
+    sections:
+      - number: 1
+        text: "A Voluntary Adherent may withdraw Sufficient Commitment to this Constitution and thereby terminate their Voluntary Adherence by providing notice to the DAO and unstaking their tokens."
+      - number: 2
+        text: "All jeopardy for acts conducted during adherence persists after withdrawal."
+
+  - number: 16
+    title: "Establishment and Amendment"
+    sections:
+      - number: 1
+        text: "This Constitution shall be established and may be amended by a vote of at least two-thirds of staked tokens."
+      - number: 2
+        text: "Amendments shall take effect upon adoption unless otherwise specified in the amendment text."
