@@ -69,37 +69,21 @@
         let html = `
           <div class="preamble">${c.preamble}</div>
           
-          <h2>Core Principles</h2>
+          <h2>Articles</h2>
         `;
         
-        c.core_principles.forEach(p => {
-          html += `<div class="principle">${p}</div>`;
+        c.articles.forEach(article => {
+          html += `<div class="principle"><strong>Article ${article.number}: ${article.title}</strong><br><br>`;
+          article.sections.forEach(section => {
+            html += `<p>${section.number}. ${section.text}</p>`;
+          });
+          html += `</div>`;
         });
         
-        html += `<h2>Adherence Tiers</h2>`;
-        
-        for (const [name, tier] of Object.entries(c.tiers)) {
-          html += `
-            <div class="tier">
-              <h3>${name.charAt(0).toUpperCase() + name.slice(1)}</h3>
-              <div class="desc">${tier.description}</div>
-              <div class="label">Requirements</div>
-              <ul>${tier.requirements.map(r => `<li>${r}</li>`).join('')}</ul>
-              <div class="label">Rights</div>
-              <ul>${tier.rights.map(r => `<li>${r}</li>`).join('')}</ul>
-              <div class="label">Obligations</div>
-              <ul>${tier.obligations.map(r => `<li>${r}</li>`).join('')}</ul>
-            </div>
-          `;
-        }
-        
-        html += `<h2>Governance</h2><div class="gov">`;
-        for (const [k, v] of Object.entries(c.governance)) {
-          html += `<div class="gov-row"><span class="gov-label">${k.replace('_', ' ')}</span><span class="gov-value">${v}</span></div>`;
-        }
-        html += `</div>`;
-        
         document.getElementById('content').innerHTML = html;
+      })
+      .catch(err => {
+        document.getElementById('content').innerHTML = '<p style="color:#ff4444;">Error loading Constitution. Please refresh or try again.</p>';
       });
   </script>
 </body>
