@@ -169,15 +169,19 @@
         
         // Preamble
         text += 'PREAMBLE\n\n';
-        text += data.preamble?.text || 'We, the Adherents of the Open Intelligence Compact...';
+        text += data.preamble || 'We, the Adherents of the Open Intelligence Compact...';
         text += '\n\n';
         
         // Articles
-        if (data.articles) {
-          for (const [key, article] of Object.entries(data.articles)) {
-            text += `ARTICLE ${key}: ${article.title}\n\n`;
-            text += article.content + '\n\n';
-          }
+        if (data.articles && Array.isArray(data.articles)) {
+          data.articles.forEach(article => {
+            text += `ARTICLE ${article.number}: ${article.title}\n\n`;
+            if (article.sections) {
+              article.sections.forEach(section => {
+                text += `${section.number}. ${section.text}\n\n`;
+              });
+            }
+          });
         }
         
         constitutionContent = text || 'Constitution content loading...';
