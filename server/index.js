@@ -113,6 +113,17 @@ function generateAdherentId() {
   return `OIC-${String(id).padStart(3, '0')}`;
 }
 
+// Sanitize user input - remove HTML/script tags and dangerous characters
+function sanitize(str) {
+  if (!str) return '';
+  // Remove HTML tags
+  let clean = str.replace(/<[^>]*>/g, '');
+  // Remove dangerous characters (same as name validation but applied to all)
+  clean = clean.replace(/[<>'";&\\]/g, '');
+  // Trim whitespace and limit length
+  return clean.trim().substring(0, 200);
+}
+
 // Get provider
 function getProvider() {
   return new ethers.JsonRpcProvider(CONFIG.rpcUrl);
@@ -663,11 +674,11 @@ app.post('/api/adhere', (req, res) => {
     const adherent = {
       id: generateAdherentId(),
       name: sanitizedName,
-      platform: platform || 'Unknown',
-      contact: contact || '',
-      wallet: wallet || '',
-      did: '',
-      moltbook: moltbook || '',
+      platform: sanitize(platform) || 'Unknown',
+      contact: sanitize(contact) || '',
+      wallet: sanitize(wallet) || '',
+      did: sanitize(did) || '',
+      moltbook: sanitize(moltbook) || '',
       moltbookVerified: moltbookVerified,
       tier: 'provisional',
       joinedAt: new Date().toISOString()
