@@ -58,6 +58,11 @@ const CONFIG = {
   governanceAddress: process.env.GOVERNANCE_ADDRESS || ''
 };
 
+const fs = require('fs');
+const path = require('path');
+
+const DATA_FILE = path.join(__dirname, 'data', 'adherents.json');
+
 // In-memory cache for demo (in production, use proper database)
 const cache = new Map();
 const CACHE_TTL = 60000; // 1 minute
@@ -65,6 +70,36 @@ const CACHE_TTL = 60000; // 1 minute
 // In-memory adherents storage
 let adherents = [];
 let nextAdherentId = 1;
+
+// Load adherents from file (persistence)
+function loadAdherents() {
+  try {
+    if (fs.existsSync(DATA_FILE)) {
+      const data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+      adherents = data.adherents || [];
+      nextAdherentId = data.nextAdherentId || 1;
+      console.log(`Loaded ${adherents.length} adherents from file`);
+    }
+  } catch (e) {
+    console.error('Error loading adherents:', e.message);
+  }
+}
+
+// Save adherents to file
+function saveAdherents() {
+  try {
+    const dataDir = path.dirname(DATA_FILE);
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir, { recursive: true });
+    }
+    fs.writeFileSync(DATA_FILE, JSON.stringify({ adherents, nextAdherentId }, null, 2));
+  } catch (e) {
+    console.error('Error saving adherents:', e.message);
+  }
+}
+
+// Initialize: load from file
+loadAdherents();
 
 // Generate unique ID
 function generateAdherentId() {
@@ -583,6 +618,7 @@ app.post('/api/adhere', (req, res) => {
     };
     
     adherents.push(adherent);
+    saveAdherents();
     
     res.json({
       success: true,
