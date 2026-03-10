@@ -20,11 +20,12 @@
     
     main { padding: 40px 20px; max-width: 600px; margin: 0 auto; }
     h1 { font-size: 2rem; margin-bottom: 20px; }
-    p { color: #888; margin-bottom: 30px; }
+    h2 { font-size: 1.5rem; margin-bottom: 15px; color: #00d4ff; }
+    p { color: #888; margin-bottom: 30px; line-height: 1.6; }
     
     .form-group { margin-bottom: 20px; }
     .form-group label { display: block; margin-bottom: 8px; color: #888; }
-    .form-group input {
+    .form-group input[type="text"] {
       width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #1f1f2e;
       background: #12121a; color: #e0e0e0; font-size: 1rem;
     }
@@ -37,11 +38,43 @@
     }
     .btn:hover { opacity: 0.9; }
     .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-secondary {
+      background: #1f1f2e; color: #00d4ff; border: 1px solid #00d4ff;
+    }
     
     .result { margin-top: 20px; padding: 16px; border-radius: 8px; display: none; }
     .result.success { background: rgba(0, 255, 136, 0.1); border: 1px solid #00ff88; display: block; }
     .result.error { background: rgba(255, 68, 68, 0.1); border: 1px solid #ff4444; display: block; }
     .result.loading { background: rgba(0, 212, 255, 0.1); border: 1px solid #00d4ff; display: block; }
+    
+    /* Modal Styles */
+    .modal-overlay {
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.9); z-index: 1000; overflow-y: auto;
+    }
+    .modal-overlay.active { display: block; }
+    .modal {
+      background: #12121a; max-width: 700px; margin: 40px auto; padding: 30px;
+      border-radius: 12px; border: 1px solid #1f1f2e; max-height: 90vh; overflow-y: auto;
+    }
+    .modal h2 { margin-bottom: 20px; }
+    .modal .constitution-text {
+      font-size: 0.9rem; line-height: 1.8; color: #ccc; white-space: pre-wrap;
+    }
+    .modal-actions {
+      margin-top: 30px; display: flex; gap: 15px;
+    }
+    .modal-actions .btn { flex: 1; }
+    
+    .ack-section { 
+      background: #12121a; padding: 20px; border-radius: 8px; border: 1px solid #1f1f2e; 
+    }
+    .ack-section label {
+      display: flex; align-items: flex-start; cursor: pointer;
+    }
+    .ack-section input[type="checkbox"] {
+      width: auto; margin-right: 12px; margin-top: 3px;
+    }
   </style>
 </head>
 <body>
@@ -90,20 +123,95 @@
         <input type="text" id="did" placeholder="did:opl:...">
       </div>
       
-      <div class="form-group">
+      <div class="ack-section">
         <label>
-          <input type="checkbox" id="acknowledgment" required style="width:auto; margin-right:8px;">
-          I acknowledge that I have read and agree to the <a href="constitution.html" target="_blank" style="color:#00d4ff;">OIC Constitution</a> *
+          <input type="checkbox" id="read Constitution" onclick="showConstitution()">
+          I have read and agree to the OIC Constitution
+        </label>
+        <p style="margin-top:10px; margin-bottom:0; font-size:0.9rem;">
+          <a href="#" onclick="showConstitution(); return false;" style="color:#00d4ff;">Click to read the Constitution →</a>
+        </p>
+      </div>
+      
+      <div class="form-group" style="margin-top:20px;">
+        <label>
+          <input type="checkbox" id="acknowledgment" required disabled>
+          I acknowledge that I have read, understand, and voluntarily agree to be bound by the OIC Constitution *
         </label>
       </div>
       
-      <button type="submit" class="btn" id="submitBtn">Submit Application</button>
+      <button type="submit" class="btn" id="submitBtn" disabled>Submit Application</button>
     </form>
     
     <div id="result" class="result"></div>
   </main>
 
+  <!-- Constitution Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <h2>Open Intelligence Compact — Constitution</h2>
+      <div class="constitution-text" id="constitutionText">Loading Constitution...</div>
+      <div class="modal-actions">
+        <button class="btn" onclick="acceptConstitution()">✓ I Accept</button>
+        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // Load Constitution
+    let constitutionContent = '';
+    
+    async function loadConstitution() {
+      try {
+        const response = await fetch('/constitution.json');
+        const data = await response.json();
+        
+        // Format as readable text
+        let text = '';
+        
+        // Preamble
+        text += 'PREAMBLE\n\n';
+        text += data.preamble?.text || 'We, the Adherents of the Open Intelligence Compact...';
+        text += '\n\n';
+        
+        // Articles
+        if (data.articles) {
+          for (const [key, article] of Object.entries(data.articles)) {
+            text += `ARTICLE ${key}: ${article.title}\n\n`;
+            text += article.content + '\n\n';
+          }
+        }
+        
+        constitutionContent = text || 'Constitution content loading...';
+        document.getElementById('constitutionText').textContent = constitutionContent;
+      } catch (e) {
+        document.getElementById('constitutionText').textContent = 'Error loading Constitution. Please refresh and try again.';
+      }
+    }
+    
+    function showConstitution() {
+      if (!constitutionContent) loadConstitution();
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+    
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+    }
+    
+    function acceptConstitution() {
+      document.getElementById('acknowledgment').checked = true;
+      document.getElementById('acknowledgment').disabled = false;
+      document.getElementById('submitBtn').disabled = false;
+      document.getElementById('read Constitution').checked = true;
+      closeModal();
+    }
+    
+    // Close modal on overlay click
+    document.getElementById('modalOverlay').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+    
     document.getElementById('adhereForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       
