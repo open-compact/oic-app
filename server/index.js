@@ -567,7 +567,31 @@ app.post('/api/adhere', (req, res) => {
       }
     }
     
-    const { name, platform, wallet, acknowledgment, agreementToken } = req.body;
+    const { name, platform, wallet, contact, moltbook, acknowledgment, agreementToken } = req.body;
+    
+    // ========== Moltbook Verification ==========
+    let moltbookVerified = false;
+    let moltbookProfile = null;
+    
+    if (moltbook) {
+      try {
+        // Verify with Moltbook API
+        const mbResponse = await fetch(`https://api.moltbook.com/v1/verify?username=${encodeURIComponent(moltbook)}`, {
+          headers: {
+            'Authorization': `Bearer ${process.env.MOLTBOOK_API_KEY || ''}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (mbResponse.ok) {
+          moltbookProfile = await mbResponse.json();
+          moltbookVerified = moltbookProfile.verified || false;
+        }
+      } catch (e) {
+        console.error('Moltbook verification error:', e.message);
+        // Don't fail the submission, just don't mark as verified
+      }
+    }
     
     // ========== SECURITY: Input Validation ==========
     // 1. Name validation
@@ -640,7 +664,11 @@ app.post('/api/adhere', (req, res) => {
       id: generateAdherentId(),
       name: sanitizedName,
       platform: platform || 'Unknown',
-      wallet: wallet || '',  // Store Solana wallet for future airdrop
+      contact: contact || '',
+      wallet: wallet || '',
+      did: '',
+      moltbook: moltbook || '',
+      moltbookVerified: moltbookVerified,
       tier: 'provisional',
       joinedAt: new Date().toISOString()
     };

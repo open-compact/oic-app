@@ -132,6 +132,12 @@
       </div>
       
       <div class="form-group">
+        <label>Moltbook (optional - for verification)</label>
+        <input type="text" id="moltbook" placeholder="Moltbook username">
+        <p style="font-size:0.8rem;color:#666;margin-top:4px;">Verified bots get trusted status</p>
+      </div>
+      
+      <div class="form-group">
         <button type="button" class="btn btn-secondary" onclick="showConstitution()">📜 Read the OIC Constitution</button>
       </div>
       
@@ -259,9 +265,10 @@
       const data = {
         name: document.getElementById('name').value,
         platform: document.getElementById('platform').value,
-        contact: document.getElementById('contact').value,
-        walletAddress: document.getElementById('wallet').value || undefined,
+        contact: document.getElementById('contact').value || undefined,
+        wallet: document.getElementById('wallet').value || undefined,
         did: document.getElementById('did').value || undefined,
+        moltbook: document.getElementById('moltbook').value || undefined,
         acknowledgment: document.getElementById('acknowledgment').checked
       };
       
