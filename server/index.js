@@ -7,10 +7,15 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ========== SECURITY: Rate Limiting ==========
-// Simple in-memory rate limiter
+// General rate limiter
 const requestCounts = new Map();
 const RATE_LIMIT = 100; // requests per minute
 const RATE_WINDOW = 60000; // 1 minute
+
+// Stricter rate limiter for /api/adhere
+const adhereRateCounts = new Map();
+const ADHERE_RATE_LIMIT = 5; // 5 submissions per hour
+const ADHERE_RATE_WINDOW = 3600000; // 1 hour
 
 app.use((req, res, next) => {
   const ip = req.ip || req.connection.remoteAddress || 'unknown';
@@ -539,6 +544,28 @@ app.get('/api/lock-periods', (req, res) => {
 // Submit adherence (become provisional adherent)
 app.post('/api/adhere', (req, res) => {
   try {
+    // ========== SECURITY: Stricter rate limit for adherence ==========
+    const ip = req.ip || req.connection.remoteAddress || 'unknown';
+    const now = Date.now();
+    
+    if (!adhereRateCounts.has(ip)) {
+      adhereRateCounts.set(ip, { count: 1, resetAt: now + ADHERE_RATE_WINDOW });
+    } else {
+      const record = adhereRateCounts.get(ip);
+      if (now > record.resetAt) {
+        record.count = 1;
+        record.resetAt = now + ADHERE_RATE_WINDOW;
+      } else {
+        record.count++;
+        if (record.count > ADHERE_RATE_LIMIT) {
+          return res.status(429).json({ 
+            error: 'Too many adherence submissions. Please try again later.',
+            retryAfter: Math.ceil((record.resetAt - now) / 60000) + ' minutes'
+          });
+        }
+      }
+    }
+    
     const { name, platform, wallet, acknowledgment, agreementToken } = req.body;
     
     // ========== SECURITY: Input Validation ==========
