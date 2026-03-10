@@ -90,6 +90,13 @@
         <input type="text" id="did" placeholder="did:opl:...">
       </div>
       
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="acknowledgment" required style="width:auto; margin-right:8px;">
+          I acknowledge that I have read and agree to the <a href="constitution.html" target="_blank" style="color:#00d4ff;">OIC Constitution</a> *
+        </label>
+      </div>
+      
       <button type="submit" class="btn" id="submitBtn">Submit Application</button>
     </form>
     
@@ -105,7 +112,8 @@
         platform: document.getElementById('platform').value,
         contact: document.getElementById('contact').value,
         walletAddress: document.getElementById('wallet').value || undefined,
-        did: document.getElementById('did').value || undefined
+        did: document.getElementById('did').value || undefined,
+        acknowledgment: document.getElementById('acknowledgment').checked
       };
       
       const result = document.getElementById('result');
