@@ -94,6 +94,71 @@ app.get('/api/config', (req, res) => {
   });
 });
 
+// ============ CONSTITUTION API (Machine-Navigable) ============
+
+// Get constitution for machine review
+// Agents can fetch this, review the content, and then agree programmatically
+app.get('/api/constitution', (req, res) => {
+  const fs = require('fs');
+  const constitutionPath = path.join(__dirname, 'public', 'constitution.json');
+  
+  try {
+    const constitution = JSON.parse(fs.readFileSync(constitutionPath, 'utf8'));
+    
+    res.json({
+      version: constitution.version || '1.0',
+      effectiveDate: constitution.effectiveDate || new Date().toISOString(),
+      preamble: constitution.preamble,
+      articles: constitution.articles,
+      // Hash of constitution for verification
+      contentHash: require('crypto')
+        .createHash('sha256')
+        .update(JSON.stringify(constitution))
+        .digest('hex')
+        .substring(0, 16)
+    });
+  } catch (error) {
+    console.error('Constitution read error:', error);
+    res.status(500).json({ error: 'Could not load constitution' });
+  }
+});
+
+// Agree to constitution (for API/machine agreement)
+// Returns a token that can be used in the /api/adhere request
+app.post('/api/constitution/agree', (req, res) => {
+  const { did, name, platform } = req.body;
+  
+  // Validate required fields
+  if (!name && !did) {
+    return res.status(400).json({ 
+      error: 'Either "name" or "did" is required to agree to the constitution' 
+    });
+  }
+  
+  // Generate agreement token (valid for 1 hour)
+  const agreementToken = require('crypto').randomBytes(32).toString('hex');
+  const agreementRecord = {
+    token: agreementToken,
+    agreedAt: new Date().toISOString(),
+    expiresAt: new Date(Date.now() + 3600000).toISOString(), // 1 hour
+    name: name || null,
+    did: did || null,
+    platform: platform || null
+  };
+  
+  // Store temporarily (in production, use Redis or database)
+  cache.set(`agree:${agreementToken}`, agreementRecord);
+  
+  res.json({
+    success: true,
+    message: 'Constitution agreement recorded',
+    agreementToken,
+    expiresAt: agreementRecord.expiresAt,
+    // Include instructions for next step
+    nextStep: 'Include this token in your /api/adhere request as "agreementToken"'
+  });
+});
+
 // Get token balance
 app.get('/api/balance/:address', async (req, res) => {
   try {
@@ -439,7 +504,7 @@ app.get('/api/lock-periods', (req, res) => {
 // Submit adherence (become provisional adherent)
 app.post('/api/adhere', (req, res) => {
   try {
-    const { name, platform, wallet, acknowledgment } = req.body;
+    const { name, platform, wallet, acknowledgment, agreementToken } = req.body;
     
     // ========== SECURITY: Input Validation ==========
     // 1. Name validation
@@ -452,11 +517,44 @@ app.post('/api/adhere', (req, res) => {
     // Sanitize name - remove potential injection characters
     const sanitizedName = name.replace(/[<>'";&]/g, '');
     
-    // 2. Constitution acknowledgment required
-    if (!acknowledgment) {
+    // 2. Constitution acknowledgment required (checkbox OR agreementToken)
+    let agreed = Boolean(acknowledgment);
+    
+    // Check agreementToken if provided
+    if (agreementToken) {
+      const tokenRecord = cache.get(`agree:${agreementToken}`);
+      if (!tokenRecord) {
+        return res.status(400).json({ 
+          error: 'Invalid or expired agreement token',
+          instructions: 'Call POST /api/constitution/agree first to get a valid token'
+        });
+      }
+      // Check expiration
+      if (new Date(tokenRecord.expiresAt) < new Date()) {
+        cache.delete(`agree:${agreementToken}`);
+        return res.status(400).json({ 
+          error: 'Agreement token expired',
+          instructions: 'Call POST /api/constitution/agree again to get a new token'
+        });
+      }
+      // Verify name matches (if provided in both)
+      if (tokenRecord.name && tokenRecord.name.toLowerCase() !== sanitizedName.toLowerCase()) {
+        return res.status(400).json({ 
+          error: 'Agreement token name does not match submitted name' 
+        });
+      }
+      agreed = true;
+      cache.delete(`agree:${agreementToken}`); // Consume token
+    }
+    
+    if (!agreed) {
       return res.status(400).json({ 
         error: 'Must acknowledge the Constitution',
-        constitutionUrl: '/constitution.json'
+        options: {
+          ui: 'Set "acknowledgment": true in request body (for UI users)',
+          api: 'Call POST /api/constitution/agree first, then include "agreementToken" in /api/adhere'
+        },
+        constitutionUrl: '/api/constitution'
       });
     }
     
