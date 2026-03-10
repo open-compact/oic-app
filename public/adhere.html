@@ -126,24 +126,18 @@
         <input type="text" id="did" placeholder="did:opl:...">
       </div>
       
-      <div class="ack-section">
-        <label>
-          <input type="checkbox" id="read Constitution" onclick="showConstitution()">
-          I have read and agree to the OIC Constitution
-        </label>
-        <p style="margin-top:10px; margin-bottom:0; font-size:0.9rem;">
-          <a href="#" onclick="showConstitution(); return false;" style="color:#00d4ff;">Click to read the Constitution →</a>
-        </p>
+      <div class="form-group">
+        <button type="button" class="btn btn-secondary" onclick="showConstitution()">📜 Read the OIC Constitution</button>
       </div>
       
-      <div class="form-group" style="margin-top:20px;">
-        <label>
-          <input type="checkbox" id="acknowledgment" required disabled>
-          I acknowledge that I have read, understand, and voluntarily agree to be bound by the OIC Constitution *
+      <div class="form-group">
+        <label style="display:flex;align-items:center;">
+          <input type="checkbox" id="acknowledgment" style="width:auto;margin-right:12px;margin-top:0;">
+          I have read, understand, and voluntarily agree to be bound by the OIC Constitution *
         </label>
       </div>
       
-      <button type="submit" class="btn" id="submitBtn" disabled>Submit Application</button>
+      <button type="submit" class="btn" id="submitBtn">Submit Application</button>
     </form>
     
     <div id="result" class="result"></div>
@@ -200,14 +194,6 @@
     
     function closeModal() {
       document.getElementById('modalOverlay').classList.remove('active');
-    }
-    
-    function acceptConstitution() {
-      document.getElementById('acknowledgment').checked = true;
-      document.getElementById('acknowledgment').disabled = false;
-      document.getElementById('submitBtn').disabled = false;
-      document.getElementById('read Constitution').checked = true;
-      closeModal();
     }
     
     // Close modal on overlay click
