@@ -244,7 +244,7 @@ app.get('/api/balance/:address', async (req, res) => {
     });
   } catch (error) {
     console.error('Balance error:', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: 'Error fetching balance' });
   }
 });
 
@@ -280,7 +280,7 @@ app.get('/api/staked/:address', async (req, res) => {
     });
   } catch (error) {
     console.error('Staked error:', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: 'Error fetching staked amount' });
   }
 });
 
@@ -316,7 +316,7 @@ app.get('/api/voting-power/:address', async (req, res) => {
     });
   } catch (error) {
     console.error('Voting power error:', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: 'Error fetching voting power' });
   }
 });
 
@@ -376,7 +376,7 @@ app.get('/api/proposals', async (req, res) => {
     res.json(proposals);
   } catch (error) {
     console.error('Proposals error:', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: 'Error fetching proposals' });
   }
 });
 
@@ -410,7 +410,7 @@ app.get('/api/proposals/:id', async (req, res) => {
     });
   } catch (error) {
     console.error('Proposal error:', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: 'Error fetching proposal' });
   }
 });
 
@@ -462,7 +462,7 @@ app.post('/api/stake', async (req, res) => {
     });
   } catch (error) {
     console.error('Stake error:', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: 'Error processing stake' });
   }
 });
 
@@ -498,7 +498,7 @@ app.post('/api/unstake', async (req, res) => {
     });
   } catch (error) {
     console.error('Unstake error:', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: 'Error processing unstake' });
   }
 });
 
@@ -537,7 +537,7 @@ app.post('/api/vote', async (req, res) => {
     });
   } catch (error) {
     console.error('Vote error:', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: 'Error processing vote' });
   }
 });
 
