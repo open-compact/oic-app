@@ -655,14 +655,8 @@ app.post('/api/adhere', async (req, res) => {
       });
     }
     
-    // 3. Optional Solana wallet validation
-    if (wallet) {
-      // Basic Solana address validation (base58, 32-44 chars)
-      const solanaAddressRegex = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
-      if (!solanaAddressRegex.test(wallet)) {
-        return res.status(400).json({ error: 'Invalid Solana address format' });
-      }
-    }
+    // 3. Optional wallet - skip validation for now
+    // (can add Ethereum or Solana validation later)
     
     // Check if name already exists
     const existing = adherents.find(a => a.name.toLowerCase() === sanitizedName.toLowerCase());
