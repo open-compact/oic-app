@@ -694,7 +694,10 @@ app.post('/api/adhere', async (req, res) => {
     });
   } catch (error) {
     console.error('Adhere error:', error.stack);
-    res.status(500).json({ error: 'Internal server error. Please try again.' });
+    res.status(500).json({ 
+      error: 'Internal server error',
+      details: error.message 
+    });
   }
 });
 
