@@ -297,11 +297,11 @@
           `;
         } else {
           result.className = 'result error';
-          result.textContent = resultData.error || 'Error submitting application';
+          result.textContent = resultData.error + (resultData.details ? ' (' + resultData.details + ')' : '') || 'Error submitting application';
         }
       } catch (err) {
         result.className = 'result error';
-        result.textContent = 'Error submitting application';
+        result.textContent = 'Error submitting application: ' + err.message;
       }
       
       btn.disabled = false;
