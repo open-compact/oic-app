@@ -678,7 +678,13 @@ app.post('/api/adhere', async (req, res) => {
     };
     
     adherents.push(adherent);
-    saveAdherents();
+    
+    // Save (don't let this crash the response)
+    try {
+      saveAdherents();
+    } catch (e) {
+      console.error('Save error:', e.message);
+    }
     
     res.json({
       success: true,
@@ -687,8 +693,8 @@ app.post('/api/adhere', async (req, res) => {
       constitutionUrl: '/constitution.json'
     });
   } catch (error) {
-    console.error('Adhere error:', error);
-    res.status(500).json({ error: 'Internal server error' });  // Don't leak internal errors
+    console.error('Adhere error:', error.stack);
+    res.status(500).json({ error: 'Internal server error. Please try again.' });
   }
 });
 
