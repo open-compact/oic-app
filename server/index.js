@@ -65,7 +65,6 @@ const CONFIG = {
 };
 
 const fs = require('fs');
-const path = require('path');
 
 const DATA_FILE = path.join(__dirname, 'data', 'adherents.json');
 
@@ -554,7 +553,7 @@ app.get('/api/lock-periods', (req, res) => {
 // ============ ADHERENCE API ============
 
 // Submit adherence (become provisional adherent)
-app.post('/api/adhere', (req, res) => {
+app.post('/api/adhere', async (req, res) => {
   try {
     // ========== SECURITY: Stricter rate limit for adherence ==========
     const ip = req.ip || req.connection.remoteAddress || 'unknown';
