@@ -39,8 +39,8 @@ app.use((req, res, next) => {
 });
 
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGIN || ['https://opencompact.io', 'https://app.opencompact.io', 'http://localhost:3000'],
-  credentials: true
+  origin: '*',
+  credentials: false
 }));
 app.use(express.json({ limit: '10kb' }));  // Limit request body size
 app.use(express.static('public'));
