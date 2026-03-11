@@ -577,7 +577,7 @@ app.post('/api/adhere', async (req, res) => {
       }
     }
     
-    const { name, platform, wallet, contact, moltbook, acknowledgment, agreementToken } = req.body;
+    const { name, platform, wallet, contact, did, moltbook, acknowledgment, agreementToken } = req.body;
     
     // ========== Moltbook Verification ==========
     let moltbookVerified = false;
